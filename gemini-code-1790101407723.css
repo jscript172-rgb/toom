@@ -1,0 +1,317 @@
+:root {
+    --primary-blue: #1a73e8;
+    --hover-blue: #1557b0;
+    --light-blue: #e8f0fe;
+    --dark-bg: #0f172a;
+    --dark-card: #1e293b;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --white: #ffffff;
+    --black: #000000;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    background-color: #f8fafc;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header Navigation */
+header {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.8rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-btn:hover, .nav-btn.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.auth-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-lang, .btn-auth {
+    background: var(--white);
+    color: var(--primary-blue);
+    border: none;
+    padding: 0.4rem 0.9rem;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-auth {
+    background: var(--black);
+    color: var(--white);
+}
+
+.btn-lang:hover, .btn-auth:hover {
+    opacity: 0.9;
+}
+
+/* Container Layout */
+.main-layout {
+    max-width: 1200px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+    width: 100%;
+    flex: 1;
+}
+
+.section-page {
+    display: none;
+}
+
+.section-page.active {
+    display: block;
+}
+
+/* Card Styles */
+.card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.section-sub {
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+}
+
+.feed-title {
+    margin: 1rem 0;
+}
+
+.login-banner {
+    background: var(--light-blue);
+    border-left: 5px solid var(--primary-blue);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login-banner p {
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+/* Feed & Post Form */
+.post-form h3 {
+    margin-bottom: 0.5rem;
+}
+
+.post-form textarea {
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.8rem;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+}
+
+.file-input-wrapper {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-input-label {
+    background: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-publish {
+    width: auto;
+    padding: 0.5rem 1.5rem;
+}
+
+.post-img-preview {
+    max-width: 100%;
+    max-height: 350px;
+    border-radius: 8px;
+    margin-top: 10px;
+    object-fit: cover;
+}
+
+/* Authentication Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.modal-header {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-blue);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.otp-label {
+    color: var(--primary-blue);
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    outline: none;
+}
+
+.btn-submit {
+    width: 100%;
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    padding: 0.7rem;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background: var(--hover-blue);
+}
+
+.btn-close {
+    background: #64748b;
+    margin-top: 10px;
+}
+
+/* Post Render Styles */
+.post-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.8rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+}
+
+.verified-tag {
+    color: green;
+    font-weight: bold;
+}

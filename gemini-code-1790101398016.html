@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOOM - Social, News, Books & Marketing</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo" onclick="switchTab('news')">
+                <i class="fa-solid fa-globe"></i> TOOM
+            </a>
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="switchTab('news')">
+                    <i class="fa-solid fa-newspaper"></i> <span class="lang-news">දෛනික පුවත් (News)</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('books')">
+                    <i class="fa-solid fa-book"></i> <span class="lang-books">පොත් (Books)</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('marketing')">
+                    <i class="fa-solid fa-bullhorn"></i> <span class="lang-marketing">වෙළඳ දැන්වීම් (Ads)</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('talent')">
+                    <i class="fa-solid fa-lightbulb"></i> <span class="lang-talent">දක්ෂතා (Talent)</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('profile')">
+                    <i class="fa-solid fa-user"></i> <span class="lang-profile">ගිණුම (Profile)</span>
+                </button>
+            </nav>
+            <div class="auth-actions">
+                <button class="btn-lang" onclick="toggleLanguage()" id="langBtn">EN</button>
+                <button class="btn-auth" id="authBtn" onclick="openAuthModal()">Sign In</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="main-layout">
+
+        <!-- Banner for Unauthenticated Users -->
+        <div class="login-banner" id="guestBanner">
+            <div>
+                <strong id="guestTitle">ඔබ අමුත්තෙකු ලෙස පිවිස ඇත (Guest Mode)</strong>
+                <p id="guestSub">ගිණුමට Sign In වීමෙන් තොරව ඔබට නැරඹිය හැක්කේ දෛනික පුවත් පමණි. සියලු තොරතුරු ලබාගැනීමට Sign In වන්න.</p>
+            </div>
+            <button class="btn-auth" onclick="openAuthModal()">Sign In Now</button>
+        </div>
+
+        <!-- Section 1: Daily News & Community Feed -->
+        <section id="news" class="section-page active">
+            <div class="card post-form" id="newsPostCard" style="display:none;">
+                <h3 id="postTitleTxt">පුවතක් හෝ අදහසක් පළ කරන්න</h3>
+                <textarea id="newsText" placeholder="ඔබගේ අදහස් හෝ නවතම පුවත මෙහි සටහන් කරන්න..."></textarea>
+                <div class="file-input-wrapper">
+                    <label class="file-input-label">
+                        <i class="fa-solid fa-image"></i> ඡායාරූපයක් එක් කරන්න (Photo Access)
+                        <input type="file" id="newsImgInput" accept="image/*" style="display:none;" onchange="previewImage(this, 'newsPreview')">
+                    </label>
+                    <button class="btn-submit btn-publish" onclick="addNewsPost()">Publish</button>
+                </div>
+                <img id="newsPreview" class="post-img-preview" style="display:none;">
+            </div>
+
+            <h2 class="feed-title" id="feedHeader">දෛනික පුවත් සහ පෝස්ටු (Daily News)</h2>
+            <div id="newsFeedList"></div>
+        </section>
+
+        <!-- Section 2: Book Reading & Publishing -->
+        <section id="books" class="section-page">
+            <div class="card">
+                <h2>පොත් ප්‍රකාශනය සහ කියවීම් මධ්‍යස්ථානය (Book Nook & Publishing)</h2>
+                <p class="section-sub">පොත් කතුවරුන්ට සහ ප්‍රකාශකයින්ට නව පොත් එකතු කළ හැක.</p>
+            </div>
+            <div id="booksContent"></div>
+        </section>
+
+        <!-- Section 3: Digital Marketing & Publisher Ads -->
+        <section id="marketing" class="section-page">
+            <div class="card">
+                <h2>වෙළඳ දැන්වීම් සහ ප්‍රකාශක ප්‍රචාරණය (Marketing & Ads Space)</h2>
+                <p class="section-sub">ඔබගේ නිෂ්පාදන සහ සේවාවන් ප්‍රචාරණය කරන්න.</p>
+            </div>
+            <div id="adsContent"></div>
+        </section>
+
+        <!-- Section 4: Talent Showcase -->
+        <section id="talent" class="section-page">
+            <div class="card">
+                <h2>දක්ෂතා සහ කුසලතා වර්ධනය (Talent Improvement Hub)</h2>
+                <p class="section-sub">ඔබගේ හැකියාවන් ඉදිරිපත් කරන්න සහ අලුත් දෙයක් ඉගෙන ගන්න.</p>
+            </div>
+            <div id="talentContent"></div>
+        </section>
+
+        <!-- Section 5: Profile & Settings -->
+        <section id="profile" class="section-page">
+            <div class="card" id="profileCard"></div>
+        </section>
+
+    </main>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">TOOM ගිණුමට පිවිසෙන්න</div>
+            
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="authUsername" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label>Gmail Address</label>
+                <input type="email" id="authEmail" placeholder="example@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="authPassword" placeholder="••••••••">
+            </div>
+
+            <!-- OTP Verification step -->
+            <div class="form-group" id="otpGroup" style="display:none;">
+                <label class="otp-label">Gmail Verification Code (OTP)</label>
+                <input type="text" id="authOtp" placeholder="Enter 6-digit code sent to Gmail">
+            </div>
+
+            <button class="btn-submit" id="modalSubmitBtn" onclick="handleAuthSubmit()">Sign In / Gmail Verify</button>
+            <button class="btn-submit btn-close" onclick="closeAuthModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

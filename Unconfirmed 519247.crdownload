@@ -1,0 +1,178 @@
+// State Management
+let currentUser = null;
+let currentLang = 'SI'; // 'SI' or 'EN'
+let otpSent = false;
+
+// Initial Sample News Posts
+const samplePosts = [
+    {
+        author: "TOOM News Desk",
+        time: "මීට පැයකට පෙර",
+        text: "ශ්‍රී ලංකාවේ නවතම තාක්ෂණික සහ අධ්‍යාපනික පුවත් සජීවීව TOOM පුවත් සේවාව ඔස්සේ ලබාගත හැක.",
+        image: "images/placeholder-news.png"
+    }
+];
+
+window.onload = function() {
+    renderFeed();
+};
+
+// Navigation Switcher
+function switchTab(tabId) {
+    // Guard non-news tabs if not logged in
+    if (!currentUser && tabId !== 'news') {
+        alert(currentLang === 'SI' 
+            ? "මෙම අංශය භාවිතා කිරීමට කරුණාකර පළමුව Sign In වන්න!" 
+            : "Please sign in to access this feature!");
+        openAuthModal();
+        return;
+    }
+
+    document.querySelectorAll('.section-page').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById(tabId).classList.add('active');
+    
+    if (tabId === 'profile') {
+        renderProfile();
+    }
+}
+
+// Toggle Language
+function toggleLanguage() {
+    currentLang = currentLang === 'SI' ? 'EN' : 'SI';
+    document.getElementById('langBtn').innerText = currentLang === 'SI' ? 'EN' : 'SI';
+
+    // Text adjustments based on language selection
+    if (currentLang === 'EN') {
+        document.querySelector('.lang-news').innerText = "Daily News";
+        document.querySelector('.lang-books').innerText = "Books";
+        document.querySelector('.lang-marketing').innerText = "Ads & Marketing";
+        document.querySelector('.lang-talent').innerText = "Talent Hub";
+        document.querySelector('.lang-profile').innerText = "Profile";
+        document.getElementById('guestTitle').innerText = "You are currently browsing as a Guest";
+        document.getElementById('guestSub').innerText = "Without signing in, only Daily News is available. Please sign in to unlock full features.";
+    } else {
+        document.querySelector('.lang-news').innerText = "දෛනික පුවත් (News)";
+        document.querySelector('.lang-books').innerText = "පොත් (Books)";
+        document.querySelector('.lang-marketing').innerText = "වෙළඳ දැන්වීම් (Ads)";
+        document.querySelector('.lang-talent').innerText = "දක්ෂතා (Talent)";
+        document.querySelector('.lang-profile').innerText = "ගිණුම (Profile)";
+        document.getElementById('guestTitle').innerText = "ඔබ අමුත්තෙකු ලෙස පිවිස ඇත (Guest Mode)";
+        document.getElementById('guestSub').innerText = "ගිණුමට Sign In වීමෙන් තොරව ඔබට නැරඹිය හැක්කේ දෛනික පුවත් පමණි. සියලු තොරතුරු ලබාගැනීමට Sign In වන්න.";
+    }
+}
+
+// Authentication Handlers
+function openAuthModal() {
+    document.getElementById('authModal').classList.add('active');
+}
+
+function closeAuthModal() {
+    document.getElementById('authModal').classList.remove('active');
+}
+
+function handleAuthSubmit() {
+    const username = document.getElementById('authUsername').value.trim();
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+
+    if (!username || !email || !password) {
+        alert("Please fill in all details (Username, Gmail, Password)");
+        return;
+    }
+
+    if (!otpSent) {
+        // Simulate OTP sending to Gmail
+        otpSent = true;
+        document.getElementById('otpGroup').style.display = 'block';
+        document.getElementById('modalSubmitBtn').innerText = "Verify Code & Access TOOM";
+        alert(`Verification Code sent to ${email}. (For Demo enter any 6 digit code)`);
+        return;
+    }
+
+    // Successfully Authenticated
+    currentUser = {
+        username: username,
+        email: email,
+        avatar: username.charAt(0).toUpperCase()
+    };
+
+    closeAuthModal();
+    document.getElementById('guestBanner').style.display = 'none';
+    document.getElementById('newsPostCard').style.display = 'block';
+    document.getElementById('authBtn').innerText = currentUser.username;
+    
+    alert(currentLang === 'SI' ? "සාර්ථකව ප්‍රවේශ විය! සියලුම අංශයන් දැන් ලබාගත හැක." : "Successfully Signed In! Full access unlocked.");
+    switchTab('profile');
+}
+
+// Media Preview Handlers
+function previewImage(input, previewId) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById(previewId);
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+// Add News Post
+function addNewsPost() {
+    const txt = document.getElementById('newsText').value;
+    const imgEl = document.getElementById('newsPreview');
+    
+    if (!txt && !imgEl.src) return;
+
+    samplePosts.unshift({
+        author: currentUser.username,
+        time: "දැන් (Just now)",
+        text: txt,
+        image: imgEl.style.display !== 'none' ? imgEl.src : null
+    });
+
+    document.getElementById('newsText').value = '';
+    imgEl.style.display = 'none';
+    imgEl.src = '';
+
+    renderFeed();
+}
+
+function renderFeed() {
+    const container = document.getElementById('newsFeedList');
+    container.innerHTML = samplePosts.map(p => `
+        <div class="post-card">
+            <div class="post-author">
+                <div class="avatar">${p.author.charAt(0)}</div>
+                <div>
+                    <strong>${p.author}</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">${p.time}</div>
+                </div>
+            </div>
+            <p>${p.text}</p>
+            ${p.image ? `<img src="${p.image}" class="post-img-preview">` : ''}
+        </div>
+    `).join('');
+}
+
+function renderProfile() {
+    const card = document.getElementById('profileCard');
+    if (!currentUser) return;
+
+    card.innerHTML = `
+        <div style="display:flex; align-items:center; gap:15px; margin-bottom:1rem;">
+            <div class="avatar profile-avatar">${currentUser.avatar}</div>
+            <div>
+                <h2>${currentUser.username}</h2>
+                <p style="color:var(--text-muted);">${currentUser.email}</p>
+            </div>
+        </div>
+        <hr style="margin:1rem 0; border:0; border-top:1px solid var(--border-color);">
+        <h3>ඔබගේ පෞද්ගලික විස්තර (Account Details)</h3>
+        <p style="margin-top:0.5rem;">Status: <span class="verified-tag">Verified Gmail User</span></p>
+    `;
+}
